@@ -9,4 +9,8 @@ const nextConfig: NextConfig = {
   reactStrictMode: false,
 };
 
+module.exports = {
+  allowedDevOrigins: ["192.168.100.18"],
+};
+
 export default nextConfig;
