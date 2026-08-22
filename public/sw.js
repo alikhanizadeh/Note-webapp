@@ -24,15 +24,22 @@ self.addEventListener("activate", (event) => {
 });
 
 self.addEventListener("fetch", (event) => {
+  // فقط درخواست‌های GET و از نوع http/https را مدیریت کن
   if (event.request.method !== "GET") return;
+  if (!event.request.url.startsWith("http")) return;
 
   event.respondWith(
     fetch(event.request)
       .then((response) => {
+        if (!response || response.status !== 200 || response.type !== "basic") {
+          return response;
+        }
+
         const clone = response.clone();
         caches.open(CACHE_NAME).then((cache) => {
           cache.put(event.request, clone);
         });
+
         return response;
       })
       .catch(() => caches.match(event.request)),
